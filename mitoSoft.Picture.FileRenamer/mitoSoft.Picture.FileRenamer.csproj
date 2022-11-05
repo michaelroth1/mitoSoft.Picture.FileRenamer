@@ -9,14 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="mitoSoft.Media.Common" Version="1.0.1" />
     <PackageReference Include="SFERA.Helpers.VisualBasic" Version="1.2021.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Interop.Shell32">
-      <HintPath>DLL\Interop.Shell32.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\mitoSoft.Common.Media\mitoSoft.Common.Media.csproj" />
   </ItemGroup>
 
   <ItemGroup>

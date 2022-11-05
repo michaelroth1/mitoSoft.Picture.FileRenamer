@@ -1,6 +1,8 @@
-using mitoSoft.Media.Commmon;
+using mitoSoft.Common.Media;
 using mitoSoft.Picture.FileRenamer.Extensions;
 using mitoSoft.Picture.FileRenamer.Models;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace mitoSoft.Picture.FileRenamer
 {
@@ -25,7 +27,6 @@ namespace mitoSoft.Picture.FileRenamer
             this.FileListBox.Items.Clear();
         }
 
-        //Search
         private void SearchFiles_Click(object sender, EventArgs e)
         {
             if (this.OpenFileDialog.ShowDialog() == DialogResult.OK)
@@ -42,8 +43,7 @@ namespace mitoSoft.Picture.FileRenamer
             }
         }
 
-        //Renaming
-        private void Ok_Click(object sender, EventArgs e)
+        private void Renaming_Click(object sender, EventArgs e)
         {
             if (this.FileListBox.Items.Count == 0)
             {
@@ -135,6 +135,105 @@ namespace mitoSoft.Picture.FileRenamer
                 {
                     this.contextMenuStrip.Show(this, new Point(e.X, e.Y));
                 }
+            }
+        }
+
+        private void FolderSort_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.FileListBox.Items.Count <= 0)
+                {
+                    throw new InvalidOperationException("No files selected");
+                }
+
+                var dir = new DirectoryInfo(
+                                   Path.Combine(
+                                       Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
+                                       "MediaFileRenamer"
+                                       )
+                                   );
+                this.toolStripProgressBar.Minimum = 0;
+                this.toolStripProgressBar.Maximum = this.FileListBox.Items.Count;
+                this.toolStripProgressBar.Value = 0;
+                var copiedFiles = new List<FilePath>();
+                foreach (FilePath model in this.FileListBox.Items)
+                {
+                    var file = new FileInfo(model.FullName);
+
+                    this.toolStripStatusLabel.Text = file.FullName;
+                    this.toolStripProgressBar.Value++;
+                    Application.DoEvents();
+
+                    copiedFiles.Add(ShiftFile(file, dir));
+                }
+
+                this.FileListBox.Items.Clear();
+                foreach (FilePath model in copiedFiles)
+                {
+                    this.FileListBox.Items.Add(model);
+                }
+
+                this.toolStripStatusLabel.Text = $"{copiedFiles.Count} files moved to 'User/Documents/MediaFileRenamer/...'";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private static FilePath ShiftFile(FileInfo file, DirectoryInfo directory)
+        {
+            try
+            {
+                if (!file.Exists)
+                {
+                    throw new InvalidOperationException($"File '{file.FullName}' not existing.");
+                }
+
+                var date = (new MediaFileHandler()).GetCreationDate(file, false);
+
+                var monthFolder = date.ToString("yyyy_MM_(MMMyy)", CultureInfo.CreateSpecificCulture("de-DE"));
+
+                var monthPath = Path.Combine(directory.FullName, monthFolder);
+
+                if (!Directory.Exists(monthPath))
+                {
+                    Directory.CreateDirectory(monthPath);
+                }
+
+                if (!Directory.Exists(monthPath))
+                {
+                    throw new InvalidOperationException($"Somthing went wrong during creation of '{monthPath}' path.");
+                }
+
+                var oldFile = file.FullName;
+                var newFile = Path.Combine(monthPath, file.Name);
+
+                File.Copy(file.FullName, newFile, true);
+
+                file = new FileInfo(newFile);
+
+                if (!file.Exists)
+                {
+                    throw new InvalidOperationException($"File could not copied to '{monthPath}' path.");
+                }
+
+                File.Delete(oldFile); //löschen der usprünglichen Datei
+
+                return new FilePath
+                {
+                    FullName = file.FullName,
+                    Error= $"{oldFile} -> {newFile}",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new FilePath
+                {
+                    Error = ex.Message,
+                    FullName = file.FullName,
+                };
             }
         }
     }

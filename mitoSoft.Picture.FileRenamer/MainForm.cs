@@ -1,9 +1,6 @@
-using mitoSoft.Picture.FileRenamer.Contracts;
-using mitoSoft.Picture.FileRenamer.Exceptions;
+using mitoSoft.Media.Commmon;
 using mitoSoft.Picture.FileRenamer.Extensions;
-using mitoSoft.Picture.FileRenamer.Handler;
 using mitoSoft.Picture.FileRenamer.Models;
-using System.Runtime.CompilerServices;
 
 namespace mitoSoft.Picture.FileRenamer
 {
@@ -23,13 +20,17 @@ namespace mitoSoft.Picture.FileRenamer
             }
         }
 
+        private void Clear_Click(object sender, EventArgs e)
+        {
+            this.FileListBox.Items.Clear();
+        }
+
         //Search
         private void SearchFiles_Click(object sender, EventArgs e)
         {
-            if (this.openFileDialog.ShowDialog() == DialogResult.OK)
+            if (this.OpenFileDialog.ShowDialog() == DialogResult.OK)
             {
-                this.FileListBox.Items.Clear();
-                foreach (var file in this.openFileDialog.FileNames)
+                foreach (var file in this.OpenFileDialog.FileNames)
                 {
                     var filePath = new FilePath()
                     {
@@ -55,7 +56,9 @@ namespace mitoSoft.Picture.FileRenamer
             this.toolStripProgressBar.Value = 0;
             for (int j = this.FileListBox.Items.Count - 1; j >= 0; j--)
             {
-                var file = (FilePath)this.FileListBox.Items[j];
+                var model = (FilePath)this.FileListBox.Items[j];
+
+                var file = new FileInfo(model.FullName);
 
                 if (File.Exists(file.FullName))
                 {
@@ -65,50 +68,31 @@ namespace mitoSoft.Picture.FileRenamer
 
                     try
                     {
-                        if (file.Extension.ToLower() != ".jpg" &&
-                            file.Extension.ToLower() != ".jpeg" &&
-                            file.Extension.ToLower() != ".arw" &&
-                            file.Extension.ToLower() != ".mov" &&  //MOV files from I-Phone
-                            file.Extension.ToLower() != ".mp4")
+                        var date = (new MediaFileHandler()).GetCreationDate(file);
+
+                        var dateString = date.ToString(this.FormatTextBox.Text);
+
+                        var newName = $"{dateString}";
+
+                        if ($"{newName}{file.Extension}" != file.Name)
                         {
-                            throw new InvalidExtensionException("invalid file type.");
+                            if (File.Exists(@$"{file.Directory}\{newName}{file.Extension}"))
+                            {
+                                throw new InvalidOperationException($"'{newName}{file.Extension}' could not renamed - it already exists.");
+                            }
+
+                            Microsoft.VisualBasic.FileIO.FileSystem.RenameFile(file.FullName, $"{newName}{file.Extension}");
                         }
 
-                        //*******Im Dateinamen existiert bereits ein DatumsSchlüssel************************
-
-                        i += this.RenameFile(new FileNameHandler(), file);
+                        i++;
                     }
-                    catch (FormatException)
+                    catch (Exception ex)
                     {
-                        //*******Im Dateinamen existiert kein DatumsSchlüssel*******************************
-
-
-                        if (file.Name.StartsWith("IMG-"))
-                        {
-                            i += this.RenameFile(new WhatsAppHandler(), file);
-                        }
-                        else if (file.Extension.ToLower() == ".jpg")
-                        {
-                            i += this.RenameFile(new JpegHandler(), file);
-                        }
-                        else if (file.Extension.ToLower() == ".arw")
-                        {
-                            i += this.RenameFile(new SonyHandler(), file);
-                        }
-                        else if (file.Extension.ToLower() == ".mp4")
-                        {
-                            i += this.RenameFile(new Mp4Handler(), file);
-                        }
-                        else if (file.Extension.ToLower() == ".mov")
-                        {
-                            i += this.RenameFile(new AppleHandler(), file);
-                        }
+                        model.Error = ex.Message;
                     }
-                    catch (InvalidExtensionException) { }
-                    catch (Exception) { }
                     finally
                     {
-                        if (string.IsNullOrEmpty(file.Error))
+                        if (string.IsNullOrEmpty(model.Error))
                         {
                             this.FileListBox.Items.RemoveAt(j);
                         }
@@ -124,45 +108,34 @@ namespace mitoSoft.Picture.FileRenamer
             Application.DoEvents();
         }
 
-        private int RenameFile(IHandler handler, FilePath path)
-        {
-            try
-            {
-                var file = new FileInfo(path.FullName);
-
-                var date = handler.GetShootingDate(file);
-
-                var dateString = date.ToString(this.FormatTextBox.Text);
-
-                var newName = $"{dateString}";
-
-                if ($"{newName}{file.Extension}" != file.Name)
-                {
-                    if (File.Exists(@$"{file.Directory}\{newName}{file.Extension}"))
-                    {
-                        throw new InvalidOperationException($"'{newName}{file.Extension}' could not renamed - it already exists.");
-                    }
-
-                    Microsoft.VisualBasic.FileIO.FileSystem.RenameFile(file.FullName, $"{newName}{file.Extension}");
-                }
-
-                return 1;
-            }
-            catch (FormatException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                path.Error = ex.Message;
-                return 0;
-            }
-        }
-
         private void FormatTextBox_TextChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.FormatString = this.FormatTextBox.Text;
             Properties.Settings.Default.Save();
+        }
+
+        private void OpenContainingFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var file = (FilePath)this.FileListBox.SelectedItem;
+
+            var dir = new FileInfo(file.FullName).DirectoryName;
+
+            this.OpenFileDialog.InitialDirectory = dir;
+
+            this.OpenFileDialog.ShowDialog();
+        }
+
+        private void FileListBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                //select the item under the mouse pointer
+                FileListBox.SelectedIndex = FileListBox.IndexFromPoint(e.Location);
+                if (FileListBox.SelectedIndex != -1)
+                {
+                    this.contextMenuStrip.Show(this, new Point(e.X, e.Y));
+                }
+            }
         }
     }
 }

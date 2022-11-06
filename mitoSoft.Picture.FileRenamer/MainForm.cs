@@ -3,6 +3,7 @@ using mitoSoft.Picture.FileRenamer.Extensions;
 using mitoSoft.Picture.FileRenamer.Models;
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
 
 namespace mitoSoft.Picture.FileRenamer
 {
@@ -25,6 +26,7 @@ namespace mitoSoft.Picture.FileRenamer
         private void Clear_Click(object sender, EventArgs e)
         {
             this.FileListBox.Items.Clear();
+            this.ResultListBox.Items.Clear();
         }
 
         private void SearchFiles_Click(object sender, EventArgs e)
@@ -116,7 +118,19 @@ namespace mitoSoft.Picture.FileRenamer
 
         private void OpenContainingFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var file = (FilePath)this.FileListBox.SelectedItem;
+            OpenDirectory(this.FileListBox);
+        }
+
+        private void OpenContainingFolderToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            OpenDirectory(this.ResultListBox);
+        }
+
+        private void OpenDirectory(ListBox lb)
+        {
+            if (lb.SelectedItem == null) { return; }
+
+            var file = (FilePath)lb.SelectedItem;
 
             var dir = new FileInfo(file.FullName).DirectoryName;
 
@@ -133,7 +147,21 @@ namespace mitoSoft.Picture.FileRenamer
                 FileListBox.SelectedIndex = FileListBox.IndexFromPoint(e.Location);
                 if (FileListBox.SelectedIndex != -1)
                 {
-                    this.contextMenuStrip.Show(this, new Point(e.X, e.Y));
+                    this.FileContextMenuStrip.Show(this, new Point(e.X, e.Y));
+                }
+            }
+        }
+
+        private void ResultListBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                //select the item under the mouse pointer
+                ResultListBox.SelectedIndex = ResultListBox.IndexFromPoint(e.Location);
+                if (ResultListBox.SelectedIndex != -1)
+                {
+                    this.ResultContextMenuStrip.Show(this,
+                        new Point(e.X + this.splitContainer1.SplitterDistance, e.Y));
                 }
             }
         }
@@ -156,25 +184,23 @@ namespace mitoSoft.Picture.FileRenamer
                 this.toolStripProgressBar.Minimum = 0;
                 this.toolStripProgressBar.Maximum = this.FileListBox.Items.Count;
                 this.toolStripProgressBar.Value = 0;
-                var copiedFiles = new List<FilePath>();
-                foreach (FilePath model in this.FileListBox.Items)
+                this.ResultListBox.Items.Clear();
+                for (int i = this.FileListBox.Items.Count - 1; i >= 0; i--)
                 {
-                    var file = new FileInfo(model.FullName);
-
+                    var file = (FilePath)this.FileListBox.Items[i];
                     this.toolStripStatusLabel.Text = file.FullName;
                     this.toolStripProgressBar.Value++;
                     Application.DoEvents();
 
-                    copiedFiles.Add(ShiftFile(file, dir));
+                    var model = ShiftFile(file, dir);
+                    if (string.IsNullOrEmpty(model.Error))
+                    {
+                        this.ResultListBox.Items.Add(model);
+                        this.FileListBox.Items.Remove(model);
+                    }
                 }
 
-                this.FileListBox.Items.Clear();
-                foreach (FilePath model in copiedFiles)
-                {
-                    this.FileListBox.Items.Add(model);
-                }
-
-                this.toolStripStatusLabel.Text = $"{copiedFiles.Count} files moved to 'User/Documents/MediaFileRenamer/...'";
+                this.toolStripStatusLabel.Text = $"{this.ResultListBox.Items.Count} files moved to 'User/Documents/MediaFileRenamer/...'";
             }
             catch (Exception ex)
             {
@@ -182,16 +208,16 @@ namespace mitoSoft.Picture.FileRenamer
             }
         }
 
-        private static FilePath ShiftFile(FileInfo file, DirectoryInfo directory)
+        private static FilePath ShiftFile(FilePath file, DirectoryInfo directory)
         {
             try
             {
-                if (!file.Exists)
+                if (!File.Exists(file.FullName))
                 {
                     throw new InvalidOperationException($"File '{file.FullName}' not existing.");
                 }
 
-                var date = (new MediaFileHandler()).GetCreationDate(file, false);
+                var date = (new MediaFileHandler()).GetCreationDate(new FileInfo(file.FullName), false);
 
                 var monthFolder = date.ToString("yyyy_MM_(MMMyy)", CultureInfo.CreateSpecificCulture("de-DE"));
 
@@ -210,31 +236,32 @@ namespace mitoSoft.Picture.FileRenamer
                 var oldFile = file.FullName;
                 var newFile = Path.Combine(monthPath, file.Name);
 
-                File.Copy(file.FullName, newFile, true);
+                File.Copy(oldFile, newFile, true);
 
-                file = new FileInfo(newFile);
-
-                if (!file.Exists)
+                if (!File.Exists(newFile))
                 {
                     throw new InvalidOperationException($"File could not copied to '{monthPath}' path.");
                 }
 
-                File.Delete(oldFile); //löschen der usprünglichen Datei
+                file.FullName = newFile;
 
-                return new FilePath
-                {
-                    FullName = file.FullName,
-                    Error= $"{oldFile} -> {newFile}",
-                };
+                File.Delete(oldFile); //removing the origin file
             }
             catch (Exception ex)
             {
-                return new FilePath
-                {
-                    Error = ex.Message,
-                    FullName = file.FullName,
-                };
+                file.Error = ex.Message;
             }
+            return file;
+        }
+
+        private void ShiftToLeftToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.ResultListBox.SelectedItem == null) { return; }
+
+            var item = this.ResultListBox.SelectedItem;
+
+            this.ResultListBox.Items.Remove(item);
+            this.FileListBox.Items.Add(item);
         }
     }
 }

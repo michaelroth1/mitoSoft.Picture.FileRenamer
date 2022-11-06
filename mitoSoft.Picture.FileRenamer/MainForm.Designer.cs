@@ -42,11 +42,21 @@
             this.FormatTextBox = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.FileContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openContainingFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.ResultListBox = new System.Windows.Forms.ListBox();
+            this.ResultContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openContainingFolderToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.shiftToLeftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.contextMenuStrip.SuspendLayout();
+            this.FileContextMenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            this.ResultContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -62,14 +72,13 @@
             // 
             // FileListBox
             // 
-            this.FileListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.FileListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FileListBox.FormattingEnabled = true;
+            this.FileListBox.HorizontalScrollbar = true;
             this.FileListBox.ItemHeight = 32;
-            this.FileListBox.Location = new System.Drawing.Point(12, 12);
+            this.FileListBox.Location = new System.Drawing.Point(0, 0);
             this.FileListBox.Name = "FileListBox";
-            this.FileListBox.Size = new System.Drawing.Size(1199, 708);
+            this.FileListBox.Size = new System.Drawing.Size(598, 746);
             this.FileListBox.TabIndex = 1;
             this.FileListBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FileListBox_MouseDown);
             // 
@@ -164,13 +173,13 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.FolderSort_Click);
             // 
-            // contextMenuStrip
+            // FileContextMenuStrip
             // 
-            this.contextMenuStrip.ImageScalingSize = new System.Drawing.Size(32, 32);
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.FileContextMenuStrip.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.FileContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openContainingFolderToolStripMenuItem});
-            this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(338, 42);
+            this.FileContextMenuStrip.Name = "contextMenuStrip";
+            this.FileContextMenuStrip.Size = new System.Drawing.Size(338, 42);
             // 
             // openContainingFolderToolStripMenuItem
             // 
@@ -179,11 +188,66 @@
             this.openContainingFolderToolStripMenuItem.Text = "Open containing folder";
             this.openContainingFolderToolStripMenuItem.Click += new System.EventHandler(this.OpenContainingFolderToolStripMenuItem_Click);
             // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(12, 12);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.FileListBox);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.ResultListBox);
+            this.splitContainer1.Size = new System.Drawing.Size(1199, 746);
+            this.splitContainer1.SplitterDistance = 598;
+            this.splitContainer1.TabIndex = 9;
+            // 
+            // ResultListBox
+            // 
+            this.ResultListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ResultListBox.FormattingEnabled = true;
+            this.ResultListBox.HorizontalScrollbar = true;
+            this.ResultListBox.ItemHeight = 32;
+            this.ResultListBox.Location = new System.Drawing.Point(0, 0);
+            this.ResultListBox.Name = "ResultListBox";
+            this.ResultListBox.Size = new System.Drawing.Size(597, 746);
+            this.ResultListBox.TabIndex = 0;
+            this.ResultListBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ResultListBox_MouseDown);
+            // 
+            // ResultContextMenuStrip
+            // 
+            this.ResultContextMenuStrip.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.ResultContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openContainingFolderToolStripMenuItem1,
+            this.shiftToLeftToolStripMenuItem});
+            this.ResultContextMenuStrip.Name = "ResultContextMenuStrip";
+            this.ResultContextMenuStrip.Size = new System.Drawing.Size(338, 124);
+            // 
+            // openContainingFolderToolStripMenuItem1
+            // 
+            this.openContainingFolderToolStripMenuItem1.Name = "openContainingFolderToolStripMenuItem1";
+            this.openContainingFolderToolStripMenuItem1.Size = new System.Drawing.Size(337, 38);
+            this.openContainingFolderToolStripMenuItem1.Text = "Open containing folder";
+            this.openContainingFolderToolStripMenuItem1.Click += new System.EventHandler(this.OpenContainingFolderToolStripMenuItem1_Click);
+            // 
+            // shiftToLeftToolStripMenuItem
+            // 
+            this.shiftToLeftToolStripMenuItem.Name = "shiftToLeftToolStripMenuItem";
+            this.shiftToLeftToolStripMenuItem.Size = new System.Drawing.Size(337, 38);
+            this.shiftToLeftToolStripMenuItem.Text = "← shift to left";
+            this.shiftToLeftToolStripMenuItem.Click += new System.EventHandler(this.ShiftToLeftToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1382, 867);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.FormatTextBox);
@@ -191,7 +255,6 @@
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.FileListBox);
             this.Controls.Add(this.button1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
@@ -200,7 +263,12 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.contextMenuStrip.ResumeLayout(false);
+            this.FileContextMenuStrip.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.ResultContextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -220,7 +288,12 @@
         private TextBox FormatTextBox;
         private Button button3;
         private Button button4;
-        private ContextMenuStrip contextMenuStrip;
+        private ContextMenuStrip FileContextMenuStrip;
         private ToolStripMenuItem openContainingFolderToolStripMenuItem;
+        private SplitContainer splitContainer1;
+        private ListBox ResultListBox;
+        private ContextMenuStrip ResultContextMenuStrip;
+        private ToolStripMenuItem openContainingFolderToolStripMenuItem1;
+        private ToolStripMenuItem shiftToLeftToolStripMenuItem;
     }
 }

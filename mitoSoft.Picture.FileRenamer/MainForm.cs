@@ -52,10 +52,10 @@ namespace mitoSoft.Picture.FileRenamer
                 throw new InvalidOperationException("no files selected");
             }
 
-            int i = 0;
             this.toolStripProgressBar.Minimum = 0;
             this.toolStripProgressBar.Maximum = this.FileListBox.Items.Count;
             this.toolStripProgressBar.Value = 0;
+            this.ResultListBox.Items.Clear();
             for (int j = this.FileListBox.Items.Count - 1; j >= 0; j--)
             {
                 var model = (FilePath)this.FileListBox.Items[j];
@@ -70,23 +70,11 @@ namespace mitoSoft.Picture.FileRenamer
 
                     try
                     {
-                        var date = (new MediaFileHandler()).GetCreationDate(file);
+                        var newFile = GetFileName(file);
 
-                        var dateString = date.ToString(this.FormatTextBox.Text);
+                        Microsoft.VisualBasic.FileIO.FileSystem.RenameFile(file.FullName, newFile.Name);
 
-                        var newName = $"{dateString}";
-
-                        if ($"{newName}{file.Extension}" != file.Name)
-                        {
-                            if (File.Exists(@$"{file.Directory}\{newName}{file.Extension}"))
-                            {
-                                throw new InvalidOperationException($"'{newName}{file.Extension}' could not renamed - it already exists.");
-                            }
-
-                            Microsoft.VisualBasic.FileIO.FileSystem.RenameFile(file.FullName, $"{newName}{file.Extension}");
-                        }
-
-                        i++;
+                        model.FullName = newFile.FullName;
                     }
                     catch (Exception ex)
                     {
@@ -97,6 +85,7 @@ namespace mitoSoft.Picture.FileRenamer
                         if (string.IsNullOrEmpty(model.Error))
                         {
                             this.FileListBox.Items.RemoveAt(j);
+                            this.ResultListBox.Items.Add(model);
                         }
                         else
                         {
@@ -106,8 +95,27 @@ namespace mitoSoft.Picture.FileRenamer
                 }
             }
 
-            this.toolStripStatusLabel.Text = $"{i} file(s) renamed";
+            this.toolStripStatusLabel.Text = $"{this.ResultListBox.Items.Count} file(s) renamed";
             Application.DoEvents();
+        }
+
+        private FileInfo GetFileName(FileInfo file)
+        {
+            var date = (new MediaFileHandler()).GetCreationDate(file);
+
+            for (int offset = 0; offset < 60; offset++)
+            {
+                var dateString = date.AddSeconds(offset).ToString(this.FormatTextBox.Text);
+
+                var fileName = Path.Combine(file.DirectoryName!, $"{dateString}{file.Extension}");
+
+                if (!File.Exists(fileName))
+                {
+                    return new FileInfo(fileName);
+                }
+            }
+
+            throw new InvalidProgramException($"New filename of '{file.Name}' cannot be changed to date formatted name (all used dates already existing).");
         }
 
         private void FormatTextBox_TextChanged(object sender, EventArgs e)

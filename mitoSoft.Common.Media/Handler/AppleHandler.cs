@@ -10,7 +10,7 @@ namespace mitoSoft.Common.Media.Handler
     {
         public DateTime GetShootingDate(FileInfo file)
         {
-            var detailString = FileDetailsHelper.GetDetailsOf(file, "Änderungsdatum");
+            var detailString = FileDetailsHelper.GetDetailsOf(file, "Änderungsdatum"); //TODO check for eng. system
             var date = detailString.Trim().ConvertToDateTime("dd.MM.yyyy HH:mm");
             return date!;
         }

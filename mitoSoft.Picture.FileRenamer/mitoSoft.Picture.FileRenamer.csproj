@@ -6,7 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>mitosoft.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="mitosoft.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="SFERA.Helpers.VisualBasic" Version="1.2021.3" />

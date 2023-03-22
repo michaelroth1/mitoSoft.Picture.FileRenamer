@@ -251,7 +251,7 @@
             this.OpenLocalFolderButton.Name = "OpenLocalFolderButton";
             this.OpenLocalFolderButton.Size = new System.Drawing.Size(150, 99);
             this.OpenLocalFolderButton.TabIndex = 10;
-            this.OpenLocalFolderButton.Text = "Open local Folder";
+            this.OpenLocalFolderButton.Text = "Open local Folder...";
             this.OpenLocalFolderButton.UseVisualStyleBackColor = true;
             this.OpenLocalFolderButton.Click += new System.EventHandler(this.OpenLocalFolder_Click);
             // 

@@ -8,9 +8,9 @@
         {
             get
             {
-                if (!string.IsNullOrEmpty(this.FullName))
+                if (!string.IsNullOrEmpty(FullName))
                 {
-                    return new FileInfo(this.FullName).Extension;
+                    return new FileInfo(FullName).Extension;
                 }
                 else
                 {
@@ -23,9 +23,9 @@
         {
             get
             {
-                if (!string.IsNullOrEmpty(this.FullName))
+                if (!string.IsNullOrEmpty(FullName))
                 {
-                    return new FileInfo(this.FullName).Name;
+                    return new FileInfo(FullName).Name;
                 }
                 else
                 {
@@ -38,13 +38,13 @@
 
         public override string ToString()
         {
-            if (string.IsNullOrEmpty(this.Error))
+            if (string.IsNullOrEmpty(Error))
             {
                 return FullName;
             }
             else
             {
-                return $"{this.FullName} ({this.Error})";
+                return $"{FullName} ({Error})";
             }
         }
     }

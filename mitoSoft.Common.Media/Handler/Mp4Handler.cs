@@ -3,6 +3,7 @@ using mitoSoft.Common.Media.Extensions;
 using mitoSoft.Common.Media.Helper;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace mitoSoft.Common.Media.Handler
 {
@@ -14,8 +15,8 @@ namespace mitoSoft.Common.Media.Handler
         /// <returns></returns>
         public DateTime GetShootingDate(FileInfo file)
         {
-            var detailString = FileDetailsHelper.GetDetailsOf(file, "Änderungsdatum"); //TODO check for eng. system
-            var date = detailString.Trim().ConvertToDateTime("dd.MM.yyyy HH:mm");
+            var dateString = FileDetailsHelper.GetDetailsOf(file, "Änderungsdatum"); //TODO check for eng. system
+            var date = dateString.Trim().CleanUp().ConvertToDateTime("dd.MM.yyyy HH:mm");
             return date!;
         }
     }

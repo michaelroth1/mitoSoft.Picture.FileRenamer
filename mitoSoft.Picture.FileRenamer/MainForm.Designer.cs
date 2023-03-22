@@ -49,6 +49,7 @@
             this.ResultContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openContainingFolderToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.shiftToLeftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OpenLocalFolderButton = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.FileContextMenuStrip.SuspendLayout();
@@ -62,7 +63,7 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(1142, 759);
+            this.button1.Location = new System.Drawing.Point(1255, 754);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(225, 46);
             this.button1.TabIndex = 0;
@@ -78,7 +79,7 @@
             this.FileListBox.ItemHeight = 32;
             this.FileListBox.Location = new System.Drawing.Point(0, 0);
             this.FileListBox.Name = "FileListBox";
-            this.FileListBox.Size = new System.Drawing.Size(598, 746);
+            this.FileListBox.Size = new System.Drawing.Size(654, 741);
             this.FileListBox.TabIndex = 1;
             this.FileListBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.FileListBox_MouseDown);
             // 
@@ -90,7 +91,7 @@
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(1217, 64);
+            this.button2.Location = new System.Drawing.Point(1330, 64);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(150, 46);
             this.button2.TabIndex = 2;
@@ -104,9 +105,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar,
             this.toolStripStatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 825);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 820);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1382, 42);
+            this.statusStrip1.Size = new System.Drawing.Size(1495, 42);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -123,8 +124,9 @@
             // 
             // pictureBox1
             // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.Image = global::mitoSoft.Picture.FileRenamer.Properties.Resources.Mitosoft_Logo_transparent;
-            this.pictureBox1.Location = new System.Drawing.Point(1219, 145);
+            this.pictureBox1.Location = new System.Drawing.Point(1330, 155);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(150, 88);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -135,7 +137,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 766);
+            this.label1.Location = new System.Drawing.Point(12, 761);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(94, 32);
             this.label1.TabIndex = 5;
@@ -144,7 +146,7 @@
             // FormatTextBox
             // 
             this.FormatTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.FormatTextBox.Location = new System.Drawing.Point(114, 764);
+            this.FormatTextBox.Location = new System.Drawing.Point(114, 759);
             this.FormatTextBox.Name = "FormatTextBox";
             this.FormatTextBox.Size = new System.Drawing.Size(590, 39);
             this.FormatTextBox.TabIndex = 6;
@@ -154,7 +156,7 @@
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(1217, 12);
+            this.button3.Location = new System.Drawing.Point(1330, 12);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(150, 46);
             this.button3.TabIndex = 7;
@@ -165,7 +167,7 @@
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(1217, 301);
+            this.button4.Location = new System.Drawing.Point(1330, 301);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(150, 99);
             this.button4.TabIndex = 8;
@@ -203,8 +205,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.ResultListBox);
-            this.splitContainer1.Size = new System.Drawing.Size(1199, 746);
-            this.splitContainer1.SplitterDistance = 598;
+            this.splitContainer1.Size = new System.Drawing.Size(1312, 741);
+            this.splitContainer1.SplitterDistance = 654;
             this.splitContainer1.TabIndex = 9;
             // 
             // ResultListBox
@@ -215,7 +217,7 @@
             this.ResultListBox.ItemHeight = 32;
             this.ResultListBox.Location = new System.Drawing.Point(0, 0);
             this.ResultListBox.Name = "ResultListBox";
-            this.ResultListBox.Size = new System.Drawing.Size(597, 746);
+            this.ResultListBox.Size = new System.Drawing.Size(654, 741);
             this.ResultListBox.TabIndex = 0;
             this.ResultListBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ResultListBox_MouseDown);
             // 
@@ -226,7 +228,7 @@
             this.openContainingFolderToolStripMenuItem1,
             this.shiftToLeftToolStripMenuItem});
             this.ResultContextMenuStrip.Name = "ResultContextMenuStrip";
-            this.ResultContextMenuStrip.Size = new System.Drawing.Size(338, 124);
+            this.ResultContextMenuStrip.Size = new System.Drawing.Size(338, 80);
             // 
             // openContainingFolderToolStripMenuItem1
             // 
@@ -242,11 +244,23 @@
             this.shiftToLeftToolStripMenuItem.Text = "← shift to left";
             this.shiftToLeftToolStripMenuItem.Click += new System.EventHandler(this.ShiftToLeftToolStripMenuItem_Click);
             // 
+            // OpenLocalFolderButton
+            // 
+            this.OpenLocalFolderButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.OpenLocalFolderButton.Location = new System.Drawing.Point(1333, 406);
+            this.OpenLocalFolderButton.Name = "OpenLocalFolderButton";
+            this.OpenLocalFolderButton.Size = new System.Drawing.Size(150, 99);
+            this.OpenLocalFolderButton.TabIndex = 10;
+            this.OpenLocalFolderButton.Text = "Open local Folder";
+            this.OpenLocalFolderButton.UseVisualStyleBackColor = true;
+            this.OpenLocalFolderButton.Click += new System.EventHandler(this.OpenLocalFolder_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1382, 867);
+            this.ClientSize = new System.Drawing.Size(1495, 862);
+            this.Controls.Add(this.OpenLocalFolderButton);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -257,6 +271,7 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(1118, 698);
             this.Name = "MainForm";
             this.Text = "mitoSoft.Picture.FileRenamer";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -295,5 +310,6 @@
         private ContextMenuStrip ResultContextMenuStrip;
         private ToolStripMenuItem openContainingFolderToolStripMenuItem1;
         private ToolStripMenuItem shiftToLeftToolStripMenuItem;
+        private Button OpenLocalFolderButton;
     }
 }

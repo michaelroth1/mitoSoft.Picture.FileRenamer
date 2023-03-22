@@ -19,6 +19,7 @@ namespace mitoSoft.Common.Media
             {
                 if (file.Extension.ToLower() != ".jpg" &&
                     file.Extension.ToLower() != ".jpeg" &&
+                    file.Extension.ToLower() != ".heic" &&
                     file.Extension.ToLower() != ".arw" &&
                     file.Extension.ToLower() != ".mov" &&  //MOV files from I-Phone
                     file.Extension.ToLower() != ".mp4")
@@ -46,6 +47,10 @@ namespace mitoSoft.Common.Media
                 else if (file.Extension.ToLower() == ".jpg")
                 {
                     return this.GateDate(new JpegHandler(), file);
+                }
+                else if (file.Extension.ToLower() == ".heic")
+                {
+                    return this.GateDate(new HeicHandler(), file);
                 }
                 else if (file.Extension.ToLower() == ".arw")
                 {
